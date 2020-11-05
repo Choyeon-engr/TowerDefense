@@ -5,6 +5,8 @@
 #include <vector>
 #include <unordered_map>
 
+#include "CML.hpp"
+
 using namespace std;
 
 class Game
@@ -24,6 +26,12 @@ public:
     
     SDL_Texture* GetTexture(const string& fileName);
     
+    /* Specialization for TowerDefense */
+    class Grid* GetGrid() const noexcept { return mGrid; }
+    
+    vector<class Enemy*>& GetEnemies() { return mEnemies; }
+    class Enemy* GetNearestEnemy(const CML::Vector2D& position);
+    
 private:
     void Input();
     void Update();
@@ -32,17 +40,23 @@ private:
     void LoadData();
     void UnloadData();
     
-    bool mIsRunning;
-    bool mIsUpdatingActors;
+    SDL_Window* mWindow;
+    SDL_Renderer* mRenderer;
     
     Uint32 mTicksCount;
     
-    SDL_Window* mWindow;
-    SDL_Renderer* mRenderer;
+    bool mIsRunning;
+    bool mIsUpdatingActors;
     
     vector<class Actor*> mActors;
     vector<class Actor*> mPendingActors;
     
     vector<class SpriteComponent*> mSprites;
     unordered_map<string, SDL_Texture*> mTextures;
+    
+    /* Specialization for TowerDefense */
+    class Grid* mGrid;
+    
+    vector<class Enemy*> mEnemies;
+    float mEnemySpawnCoolTime;
 };

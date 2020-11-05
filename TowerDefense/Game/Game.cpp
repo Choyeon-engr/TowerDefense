@@ -3,6 +3,8 @@
 #include "Game.hpp"
 #include "Actor.hpp"
 #include "SpriteComponent.hpp"
+#include "Grid.hpp"
+#include "Enemy.hpp"
 
 bool Game::Init()
 {
@@ -12,7 +14,7 @@ bool Game::Init()
     if (!IMG_Init(IMG_INIT_PNG))
         return false;
     
-    mWindow = SDL_CreateWindow("TowerDefense", 0, 0, 512, 512, 0);
+    mWindow = SDL_CreateWindow("TowerDefense", 0, 0, 1024, 768, 0);
     if (!mWindow)
         return false;
     
@@ -115,6 +117,29 @@ SDL_Texture* Game::GetTexture(const string& fileName)
     return texture;
 }
 
+Enemy* Game::GetNearestEnemy(const CML::Vector2D& position)
+{
+    Enemy* best = nullptr;
+    
+    if (mEnemies.size() > 0)
+    {
+        best = mEnemies[0];
+        float bestDistance = (position - mEnemies[0]->GetPosition()).LengthSquared();
+        
+        for (size_t i = 1; i < mEnemies.size(); ++i)
+        {
+            float newDistance = (position - mEnemies[i]->GetPosition()).LengthSquared();
+            if (newDistance < bestDistance)
+            {
+                bestDistance = newDistance;
+                best = mEnemies[i];
+            }
+        }
+    }
+    
+    return best;
+}
+
 void Game::Input()
 {
     SDL_Event event;
@@ -130,6 +155,19 @@ void Game::Input()
     }
     
     const Uint8* keyState = SDL_GetKeyboardState(nullptr);
+    if (keyState[SDL_SCANCODE_ESCAPE])
+        mIsRunning = false;
+    
+    /* Specialization for TowerDefense */
+    if (keyState[SDL_SCANCODE_B])
+        mGrid->BuildTower();
+    
+    /* Specialization for TowerDefense */
+    int x, y;
+    Uint32 buttons = SDL_GetMouseState(&x, &y);
+    if (SDL_BUTTON(buttons) & SDL_BUTTON_LEFT)
+        mGrid->Click(x, y);
+    
     mIsUpdatingActors = true;
     for (auto actor : mActors)
         actor->Input(keyState);
@@ -166,7 +204,7 @@ void Game::Update()
 
 void Game::Output()
 {
-    SDL_SetRenderDrawColor(mRenderer, 0, 50, 100, 255);
+    SDL_SetRenderDrawColor(mRenderer, 128, 0, 128, 255);
     SDL_RenderClear(mRenderer);
     
     for (auto sprite : mSprites)
@@ -177,7 +215,7 @@ void Game::Output()
 
 void Game::LoadData()
 {
-    
+    mGrid = new Grid(this);
 }
 
 void Game::UnloadData()
