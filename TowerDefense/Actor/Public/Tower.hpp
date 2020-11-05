@@ -11,6 +11,7 @@ public:
     
 private:
     class MovementComponent* mMovement;
+    class AIComponent* mAI;
     
     float mAttackCoolTime;
     const float mAttackInterval = 2.5f;
