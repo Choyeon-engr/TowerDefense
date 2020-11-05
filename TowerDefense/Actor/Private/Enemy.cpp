@@ -46,7 +46,10 @@ void Enemy::UpdateActor(float deltaTime)
     CML::Vector2D d = GetPosition() - GetGame()->GetGrid()->GetGoalTile()->GetPosition();
     if (CML::CloseToZero(d.Length(), 10.f))
     {
+        GetGame()->GameOver();
+        /*
         mAI->ChangeState("Death");
         SetState(EDisable);
+         */
     }
 }

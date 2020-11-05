@@ -27,6 +27,8 @@ public:
     SDL_Texture* GetTexture(const string& fileName);
     
     /* Specialization for TowerDefense */
+    void GameOver() { mIsRunning = false; }
+    
     class Grid* GetGrid() const noexcept { return mGrid; }
     
     vector<class Enemy*>& GetEnemies() { return mEnemies; }
