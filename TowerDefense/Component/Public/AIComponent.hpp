@@ -11,6 +11,7 @@ class AIComponent : public Component
 {
 public:
     AIComponent(class Actor* owner, int updateOrder) : Component(owner, updateOrder), mCurrentState(nullptr){}
+    ~AIComponent();
     
     void Update(float deltaTime) override;
     

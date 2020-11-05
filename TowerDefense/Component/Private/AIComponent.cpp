@@ -1,6 +1,12 @@
 #include "AIComponent.hpp"
 #include "AIState.hpp"
 
+AIComponent::~AIComponent()
+{
+    for (auto iter = mStates.begin(); iter != mStates.end(); ++iter)
+        delete iter->second;
+}
+
 void AIComponent::Update(float deltaTime)
 {
     if (mCurrentState)
