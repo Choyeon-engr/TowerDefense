@@ -2,8 +2,6 @@
 #include "Game.hpp"
 #include "SpriteComponent.hpp"
 #include "NavigationComponent.hpp"
-#include "AIComponent.hpp"
-#include "AIState.hpp"
 #include "CircleComponent.hpp"
 #include "Grid.hpp"
 #include "Tile.hpp"
@@ -24,9 +22,6 @@ Enemy::Enemy(Game* game)
     mNavigation->SetMass(1.f);
     mNavigation->SetStartPoint(GetGame()->GetGrid()->GetStartTile());
     
-    mAI = new AIComponent(this, 1);
-    mAI->RegisterState(new AIDeath(mAI));
-    
     mCircle = new CircleComponent(this, 5);
     mCircle->SetRadius(25.f);
 }
@@ -45,11 +40,5 @@ void Enemy::UpdateActor(float deltaTime)
     
     CML::Vector2D d = GetPosition() - GetGame()->GetGrid()->GetGoalTile()->GetPosition();
     if (CML::CloseToZero(d.Length(), 10.f))
-    {
         GetGame()->GameOver();
-        /*
-        mAI->ChangeState("Death");
-        SetState(EDisable);
-         */
-    }
 }
