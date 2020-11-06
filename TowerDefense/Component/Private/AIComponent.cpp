@@ -18,6 +18,13 @@ void AIComponent::RegisterState(AIState* state)
     mStates.emplace(state->GetName(), state);
 }
 
+void AIComponent::SetCurrentState(const string& stateName)
+{
+    auto iter = mStates.find(stateName);
+    if (iter != mStates.end())
+        mCurrentState = iter->second;
+}
+
 void AIComponent::ChangeState(const string& stateName)
 {
     if (mCurrentState)
@@ -27,7 +34,7 @@ void AIComponent::ChangeState(const string& stateName)
     if (iter != mStates.end())
     {
         mCurrentState = iter->second;
-        mCurrentState->OnExit();
+        mCurrentState->OnEnter();
     }
     else
         mCurrentState = nullptr;

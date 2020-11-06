@@ -16,6 +16,7 @@ public:
     void Update(float deltaTime) override;
     
     void RegisterState(class AIState* state);
+    void SetCurrentState(const string& stateName);
     void ChangeState(const string& stateName);
     
 private:
