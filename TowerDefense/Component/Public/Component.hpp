@@ -12,6 +12,7 @@ public:
     
     virtual void Input(const uint8_t* keyState) {}
     
+    class Actor* GetOwner() const noexcept { return mOwner; }
     int GetUpdateOrder() const noexcept { return mUpdateOrder; }
     
 protected:
