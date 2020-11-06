@@ -14,6 +14,5 @@ public:
     
 private:
     class NavigationComponent* mNavigation;
-    class AIComponent* mAI;
     class CircleComponent* mCircle;
 };
