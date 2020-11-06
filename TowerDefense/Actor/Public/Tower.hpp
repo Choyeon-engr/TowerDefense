@@ -9,6 +9,11 @@ public:
     
     void UpdateActor(float deltaTime) override;
     
+    float GetAttackCoolTime() const noexcept { return mAttackCoolTime; }
+    void ResetAttackCoolTime() { mAttackCoolTime = mAttackInterval; }
+    
+    float GetAttackRange() const noexcept { return mAttackRange; }
+    
 private:
     class MovementComponent* mMovement;
     class AIComponent* mAI;
