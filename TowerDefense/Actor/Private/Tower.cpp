@@ -17,8 +17,9 @@ Tower::Tower(Game* game)
     sprite->SetTexture(GetGame()->GetTexture("/Assets/Ghost.png"));
     
     mAI = new AIComponent(this, 1);
-    mAI->RegisterState(new AIPatrol(mAI));
-    mAI->RegisterState(new AIAttack(mAI));
+    mAI->RegisterState(new TowerPatrol(mAI));
+    mAI->RegisterState(new TowerAttack(mAI));
+    mAI->SetCurrentState("TowerPatrol");
     
     mAttackCoolTime = mAttackInterval;
 }
@@ -28,31 +29,6 @@ void Tower::UpdateActor(float deltaTime)
     Actor::UpdateActor(deltaTime);
     
     mAttackCoolTime -= deltaTime;
-    if (mAttackCoolTime <= 0.f)
-    {
-        Enemy* enemy = GetGame()->GetNearestEnemy(GetPosition());
-        if (enemy)
-        {
-            CML::Vector2D direction = enemy->GetPosition() - GetPosition();
-            float distance = direction.Length();
-            if (distance <= mAttackRange)
-            {
-                mAI->ChangeState("Attack");
-                
-                SetRotation(CML::Arctan(-direction.Y, direction.X));
-                
-                Bullet* bullet = new Bullet(GetGame());
-                bullet->SetPosition(GetPosition());
-                bullet->SetRotation(GetRotation());
-                
-                mAttackCoolTime = mAttackInterval;
-            }
-            else
-                mAI->ChangeState("Patrol");
-        }
-        else
-            mAI->ChangeState("Patrol");
-    }
-    else
-        mAI->ChangeState("Patrol");
+    
+    mAI->Update(deltaTime);
 }

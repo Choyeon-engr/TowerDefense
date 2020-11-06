@@ -4,6 +4,7 @@ class AIState
 {
 public:
     AIState(class AIComponent* owner) : mOwner(owner) {}
+    virtual ~AIState() = default;
     
     virtual void Update(float deltaTime) = 0;
     virtual void OnEnter() = 0;
@@ -15,38 +16,26 @@ protected:
     class AIComponent* mOwner;
 };
 
-class AIPatrol : public AIState
+class TowerPatrol : public AIState
 {
 public:
-    AIPatrol(class AIComponent* owner) : AIState(owner) {}
+    TowerPatrol(class AIComponent* owner) : AIState(owner) {}
     
-    void Update(float deltaTime) override {}
+    void Update(float deltaTime) override;
     void OnEnter() override {}
     void OnExit() override {}
     
-    const char* GetName() const override { return "Patrol"; }
+    const char* GetName() const override { return "TowerPatrol"; }
 };
 
-class AIAttack : public AIState
+class TowerAttack : public AIState
 {
 public:
-    AIAttack(class AIComponent* owner) : AIState(owner) {}
+    TowerAttack(class AIComponent* owner) : AIState(owner) {}
     
-    void Update(float deltaTime) override {}
+    void Update(float deltaTime) override;
     void OnEnter() override {}
     void OnExit() override {}
     
-    const char* GetName() const override { return "Attack"; }
-};
-
-class AIDeath : public AIState
-{
-public:
-    AIDeath(class AIComponent* owner) : AIState(owner) {}
-    
-    void Update(float deltaTime) override {}
-    void OnEnter() override {}
-    void OnExit() override {}
-    
-    const char* GetName() const override { return "Death"; }
+    const char* GetName() const override { return "TowerAttack"; }
 };
